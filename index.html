@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سياسة التسعير في قطاع العود و البخور | Pricing Policy Calculator</title>
+  <style>
+    :root {
+      --bg: #f4f6f4;
+      --surface: #ffffff;
+      --surface-muted: #f8faf8;
+      --text: #182024;
+      --muted: #60707d;
+      --border: #d7e0db;
+      --border-strong: #bcc8c2;
+      --accent: #1f6f58;
+      --accent-soft: #eef7f1;
+      --accent-deep: #184f40;
+      --gold: #b28a3b;
+      --gold-soft: #faf4e7;
+      --blue: #4f6ea8;
+      --blue-soft: #f1f5fc;
+      --success: #176a47;
+      --success-soft: #e9f7ef;
+      --danger: #a03737;
+      --danger-soft: #fdeeee;
+      --warning: #8a5a15;
+      --warning-soft: #fff6e8;
+      --shadow: 0 18px 36px rgba(24, 32, 36, 0.06);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(31, 111, 88, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(178, 138, 59, 0.08), transparent 24%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    body {
+      padding: 24px 16px 40px;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .app-shell {
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .title-block {
+      flex: 1 1 420px;
+      min-width: 280px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2vw + 1rem, 2.3rem);
+      line-height: 1.25;
+    }
+
+    .title-block .label-en {
+      margin-top: 6px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      flex: 0 1 480px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-deep);
+      border-color: var(--accent-deep);
+    }
+
+    .btn-secondary {
+      background: var(--surface-muted);
+    }
+
+    .btn-danger {
+      background: #ffffff;
+      color: var(--danger);
+      border-color: rgba(160, 55, 55, 0.28);
+    }
+
+    .status-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 54px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .status-banner[data-type="success"] {
+      background: var(--success-soft);
+      border-color: rgba(23, 106, 71, 0.22);
+      color: var(--success);
+    }
+
+    .status-banner[data-type="error"] {
+      background: var(--danger-soft);
+      border-color: rgba(160, 55, 55, 0.2);
+      color: var(--danger);
+    }
+
+    .status-banner[data-type="warning"] {
+      background: var(--warning-soft);
+      border-color: rgba(138, 90, 21, 0.18);
+      color: var(--warning);
+    }
+
+    .status-banner[data-type="info"] {
+      background: var(--surface-muted);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .status-kicker {
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-height: 132px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .summary-label {
+      font-size: 0.96rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .summary-value {
+      direction: ltr;
+      text-align: left;
+      font-size: clamp(1.2rem, 1.2vw + 0.95rem, 1.75rem);
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .summary-meta {
+      font-size: 0.83rem;
+      color: var(--muted);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .label-ar {
+      display: block;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .label-en {
+      display: block;
+      font-size: 0.86rem;
+      color: var(--muted);
+      direction: ltr;
+      text-align: left;
+      line-height: 1.45;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 1.12rem;
+    }
+
+    .panel-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(31, 111, 88, 0.22);
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+      font-weight: 700;
+    }
+
+    .source-chip .label-en {
+      margin: 0;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+      scrollbar-width: thin;
+    }
+
+    .pricing-table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    .pricing-table th {
+      padding: 0 12px 4px;
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.84rem;
+      text-align: right;
+    }
+
+    .pricing-table th:nth-child(2),
+    .pricing-table th:nth-child(3),
+    .pricing-table th:nth-child(4) {
+      text-align: center;
+    }
+
+    .pricing-table td {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 12px;
+      vertical-align: middle;
+    }
+
+    .pricing-table td:first-child {
+      border-right: 1px solid var(--border);
+      border-top-right-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+
+    .pricing-table td:last-child {
+      border-left: 1px solid var(--border);
+      border-top-left-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
+    }
+
+    .pricing-table tr.active-source td {
+      background: var(--accent-soft);
+      border-color: rgba(31, 111, 88, 0.35);
+    }
+
+    .pricing-table tr.key-row-fee td {
+      background: #f4f1fb;
+      border-color: rgba(95, 103, 177, 0.24);
+    }
+
+    .pricing-table tr.key-row-total td {
+      background: var(--blue-soft);
+      border-color: rgba(79, 110, 168, 0.3);
+    }
+
+    .pricing-table tr.active-source.key-row-fee td {
+      background: #ebe7f8;
+    }
+
+    .pricing-table tr.active-source.key-row-total td {
+      background: #e8eefb;
+    }
+
+    .row-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .row-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 54px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(24, 32, 36, 0.1);
+      background: rgba(24, 32, 36, 0.04);
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      direction: ltr;
+      text-align: center;
+    }
+
+    .move-cell {
+      text-align: center;
+    }
+
+    .move-stack {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .move-btn {
+      appearance: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border-strong);
+      background: #ffffff;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 800;
+      line-height: 1;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .move-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      background: var(--surface-muted);
+      border-color: var(--accent);
+      color: var(--accent-deep);
+    }
+
+    .move-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    .input-shell {
+      position: relative;
+      width: 100%;
+      max-width: 250px;
+      margin: 0 auto;
+    }
+
+    .input-shell input {
+      width: 100%;
+      height: 46px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: #ffffff;
+      color: var(--text);
+      padding: 0 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-shell input:focus,
+    .field-group input:focus,
+    .field-group select:focus {
+      outline: none;
+      border-color: rgba(31, 111, 88, 0.65);
+      box-shadow: 0 0 0 3px rgba(31, 111, 88, 0.12);
+    }
+
+    .input-shell input[readonly] {
+      background: #f7f9f8;
+      cursor: default;
+    }
+
+    .percent-shell input {
+      direction: ltr;
+      text-align: left;
+      padding-right: 34px;
+    }
+
+    .currency-shell input {
+      direction: ltr;
+      text-align: left;
+      padding-left: 46px;
+    }
+
+    .input-affix {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .percent-shell .input-affix {
+      right: 12px;
+    }
+
+    .currency-shell .input-affix {
+      left: 12px;
+    }
+
+    .goods-head-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .coverage-card {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface-muted);
+    }
+
+    .coverage-card.good {
+      background: var(--success-soft);
+      border-color: rgba(23, 106, 71, 0.18);
+    }
+
+    .coverage-card.warning {
+      background: var(--warning-soft);
+      border-color: rgba(138, 90, 21, 0.18);
+    }
+
+    .coverage-copy {
+      flex: 1 1 360px;
+    }
+
+    .coverage-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.98rem;
+    }
+
+    .coverage-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 10px;
+      flex: 1 1 360px;
+    }
+
+    .coverage-stat {
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(24, 32, 36, 0.08);
+      padding: 10px 12px;
+    }
+
+    .coverage-stat span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .coverage-stat strong {
+      display: block;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .goods-table {
+      width: 100%;
+      min-width: 1180px;
+      border-collapse: collapse;
+    }
+
+    .goods-table th,
+    .goods-table td {
+      padding: 14px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      text-align: right;
+    }
+
+    .goods-table th {
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 1;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .item-cell {
+      min-width: 190px;
+    }
+
+    .item-cell .label-en {
+      margin-top: 2px;
+    }
+
+    .custom-actions {
+      margin-top: 10px;
+    }
+
+    .delete-inline {
+      appearance: none;
+      border: 1px solid rgba(160, 55, 55, 0.24);
+      background: #ffffff;
+      color: var(--danger);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+      gap: 10px;
+      min-width: 320px;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.76rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .field-group input,
+    .field-group select {
+      width: 100%;
+      height: 42px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: #ffffff;
+      color: var(--text);
+      padding: 0 12px;
+    }
+
+    .qty-box,
+    .price-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 150px;
+    }
+
+    .qty-box input,
+    .price-box input {
+      width: 100%;
+      height: 42px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-strong);
+      background: #ffffff;
+      color: var(--text);
+      padding: 0 12px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .unit-badge,
+    .sar-badge,
+    .share-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: var(--radius);
+      padding: 0 12px;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .line-total {
+      direction: ltr;
+      text-align: left;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .share-badge {
+      direction: ltr;
+      text-align: center;
+      min-width: 86px;
+    }
+
+    .empty-note {
+      padding: 22px 14px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1200px) {
+      .summary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      body {
+        padding: 18px 12px 32px;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .coverage-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel,
+      .summary-card,
+      .status-banner {
+        padding: 14px;
+      }
+
+      .header-actions,
+      .goods-head-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .btn {
+        flex: 1 1 160px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="page-header">
+      <div class="title-block">
+        <p class="eyebrow">قطاع العود و البخور</p>
+        <h1>سياسة التسعير في قطاع العود و البخور</h1>
+        <span class="label-en">Pricing Policy Calculator</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" id="savePercentagesBtn" type="button">حفظ النسب | Save Percentages</button>
+        <button class="btn btn-secondary" id="saveGoodsBtn" type="button">حفظ البضاعة | Save Goods</button>
+        <button class="btn btn-danger" id="resetBtn" type="button">إعادة التعيين | Reset</button>
+      </div>
+    </header>
+
+    <section class="status-banner" id="statusBanner" data-type="info" aria-live="polite">
+      <span class="status-kicker">جاهز | Ready</span>
+      <span id="statusMessage">تم تجهيز حاسبة التسعير. | Pricing calculator is ready.</span>
+    </section>
+
+    <section class="summary-grid" id="summaryGrid">
+      <article class="summary-card">
+        <div class="summary-label">
+          <span class="label-ar">السعر النهائي شامل الضريبة</span>
+          <span class="label-en">Final Price Including VAT</span>
+        </div>
+        <div class="summary-value" id="summaryFinal">SAR 0.00</div>
+        <div class="summary-meta" id="summaryFinalMeta">115.00%</div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-label">
+          <span class="label-ar">السعر بدون ضريبة القيمة المضافة</span>
+          <span class="label-en">Price Excluding VAT</span>
+        </div>
+        <div class="summary-value" id="summaryBase">SAR 0.00</div>
+        <div class="summary-meta">100.00%</div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-label">
+          <span class="label-ar">ضريبة القيمة المضافة</span>
+          <span class="label-en">VAT</span>
+        </div>
+        <div class="summary-value" id="summaryVat">SAR 0.00</div>
+        <div class="summary-meta" id="summaryVatMeta">15.00%</div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-label">
+          <span class="label-ar">الربح</span>
+          <span class="label-en">Profit</span>
+        </div>
+        <div class="summary-value" id="summaryProfit">SAR 0.00</div>
+        <div class="summary-meta" id="summaryProfitMeta">20.00%</div>
+      </article>
+      <article class="summary-card">
+        <div class="summary-label">
+          <span class="label-ar">إجمالي التكاليف بدون الربح والضريبة</span>
+          <span class="label-en">Total Costs Excluding Profit and VAT</span>
+        </div>
+        <div class="summary-value" id="summaryCosts">SAR 0.00</div>
+        <div class="summary-meta" id="summaryCostsMeta">0.00%</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">جدول التسعير الرئيسي</h2>
+          <span class="label-en">Main Pricing Table</span>
+        </div>
+        <div class="panel-meta">
+          <div class="source-chip" id="sourceChip">
+            <div>
+              <span class="label-ar">سطر المصدر الحالي</span>
+              <span class="label-en" id="sourceChipLabel">Final Price Including VAT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="pricing-table">
+          <colgroup>
+            <col style="width: 39%;">
+            <col style="width: 21%;">
+            <col style="width: 28%;">
+            <col style="width: 12%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>البند | Item</th>
+              <th>النسبة | Percentage</th>
+              <th>المبلغ | Amount</th>
+              <th>تحريك | Move</th>
+            </tr>
+          </thead>
+          <tbody id="pricingTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">تفصيل تكلفة البضاعة</h2>
+          <span class="label-en">Cost of Goods Breakdown</span>
+        </div>
+        <div class="goods-head-actions">
+          <button class="btn btn-secondary" id="addGoodsRowBtn" type="button">إضافة صف | Add Row</button>
+        </div>
+      </div>
+
+      <div class="coverage-card good" id="coverageCard">
+        <div class="coverage-copy">
+          <strong id="coverageTitle">إجمالي البضاعة يساوي 100.00% من تكلفة البضاعة الحالية.</strong>
+          <span class="label-en" id="coverageText">Goods total equals 100.00% of the current Cost of Goods.</span>
+        </div>
+        <div class="coverage-stats">
+          <div class="coverage-stat">
+            <span>COGS Target</span>
+            <strong id="coverageTarget">SAR 0.00</strong>
+          </div>
+          <div class="coverage-stat">
+            <span>Goods Total</span>
+            <strong id="coverageTotal">SAR 0.00</strong>
+          </div>
+          <div class="coverage-stat">
+            <span>Coverage</span>
+            <strong id="coveragePercent">0.00%</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="goods-table">
+          <colgroup>
+            <col style="width: 18%;">
+            <col style="width: 34%;">
+            <col style="width: 12%;">
+            <col style="width: 14%;">
+            <col style="width: 12%;">
+            <col style="width: 10%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>الصنف | Item</th>
+              <th>المواصفات | Specifications</th>
+              <th>الكمية | Quantity</th>
+              <th>السعر | Price (SAR)</th>
+              <th>الإجمالي | Line Total</th>
+              <th>% من COGS</th>
+            </tr>
+          </thead>
+          <tbody id="goodsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const STORAGE_KEYS = {
+        rates: "pricing-policy-calculator-rates-v1",
+        goods: "pricing-policy-calculator-goods-v1"
+      };
+
+      const DEFAULT_BASE_AMOUNT = 1000;
+      const COST_RATE_IDS = ["cogs", "sales", "management", "loans", "zakat", "payment"];
+      const PRICING_ROWS = [
+        { id: "cogs", ar: "تكلفة البضاعة", en: "Cost of Goods", badge: "COGS" },
+        { id: "sales", ar: "المبيعات والتسويق", en: "Sales & Marketing", badge: "S&M" },
+        { id: "management", ar: "الإدارة", en: "Management", badge: "MGMT" },
+        { id: "loans", ar: "القروض", en: "Loans", badge: "LOAN" },
+        { id: "zakat", ar: "الزكاة", en: "Zakat", badge: "ZKT" },
+        { id: "profit", ar: "الربح", en: "Profit", badge: "PFT" },
+        { id: "vat", ar: "ضريبة القيمة المضافة", en: "VAT", badge: "VAT" },
+        { id: "payment", ar: "طريقة الدفع", en: "Payment Method", badge: "PMT" },
+        { id: "base", ar: "السعر بدون ضريبة القيمة المضافة", en: "Price Excluding VAT", badge: "BASE" },
+        { id: "final", ar: "السعر النهائي شامل الضريبة", en: "Final Price Including VAT", badge: "FINAL" }
+      ];
+      const DEFAULT_PRICING_ROW_ORDER = PRICING_ROWS.map(function (row) {
+        return row.id;
+      });
+
+      const DEFAULT_RATES = {
+        cogs: 34,
+        sales: 34.3,
+        management: 5,
+        loans: 0,
+        zakat: 2.5,
+        profit: 20,
+        vat: 15,
+        payment: 2.2
+      };
+
+      const GOODS_TEMPLATES = [
+        {
+          id: "oud",
+          ar: "عود",
+          en: "Oud",
+          unit: "Kg",
+          defaultQty: 1,
+          defaultPrice: 100,
+          specs: [
+            { key: "name", ar: "الاسم", en: "Name", type: "text", placeholder: "اسم العود" },
+            { key: "size", ar: "الحجم", en: "Size", type: "select", options: ["1kg", "½ kg", "¼ kg", "⅛ kg"] }
+          ],
+          defaultFields: { name: "عود هندي", size: "1kg" }
+        },
+        {
+          id: "mabkhara",
+          ar: "مبخره",
+          en: "Mabkhara",
+          unit: "Qty",
+          defaultQty: 1,
+          defaultPrice: 50,
+          specs: [
+            { key: "type", ar: "النوع", en: "Type", type: "select", options: ["حائلية خشبيه", "حجازيه معدنيه"] },
+            { key: "size", ar: "الحجم", en: "Size", type: "select", options: ["L", "M", "S"] }
+          ],
+          defaultFields: { type: "حائلية خشبيه", size: "M" }
+        },
+        {
+          id: "charcoal",
+          ar: "فحم",
+          en: "Charcoal",
+          unit: "Carton",
+          defaultQty: 1,
+          defaultPrice: 40,
+          specs: [
+            { key: "type", ar: "النوع", en: "Type", type: "select", options: ["سريع الاشتعال", "الجوز الطبيعي الكرستال"] }
+          ],
+          defaultFields: { type: "سريع الاشتعال" }
+        },
+        {
+          id: "lighter",
+          ar: "ولاعه عالية البث",
+          en: "High Flame Lighter",
+          unit: "Piece",
+          defaultQty: 1,
+          defaultPrice: 10,
+          specs: [],
+          defaultFields: {}
+        },
+        {
+          id: "luxury-box",
+          ar: "صندوق فاخر",
+          en: "Luxury Box",
+          unit: "Qty",
+          defaultQty: 1,
+          defaultPrice: 65,
+          specs: [
+            { key: "type", ar: "النوع", en: "Type", type: "select", options: ["فورمايكا", "جلد", "خشب باب نجدي"] },
+            { key: "size", ar: "الحجم", en: "Size", type: "select", options: ["1kg", "½ kg", "¼ kg", "⅛ kg"] }
+          ],
+          defaultFields: { type: "جلد", size: "1kg" }
+        },
+        {
+          id: "distribution-bags",
+          ar: "اكياس ستان توزيعات",
+          en: "Distribution Satin Bags",
+          unit: "Piece",
+          defaultQty: 1,
+          defaultPrice: 15,
+          specs: [],
+          defaultFields: {}
+        },
+        {
+          id: "tongs",
+          ar: "ملقط",
+          en: "Tongs",
+          unit: "Piece",
+          defaultQty: 1,
+          defaultPrice: 10,
+          specs: [],
+          defaultFields: {}
+        },
+        {
+          id: "shipping-carton",
+          ar: "كرتون شحن",
+          en: "Shipping Carton",
+          unit: "Piece",
+          defaultQty: 1,
+          defaultPrice: 30,
+          specs: [
+            { key: "size", ar: "الحجم", en: "Size", type: "select", options: ["L", "M", "S"] }
+          ],
+          defaultFields: { size: "M" }
+        },
+        {
+          id: "bubble-wrap",
+          ar: "Bubble wrap",
+          en: "Bubble wrap",
+          unit: "1Unit",
+          defaultQty: 1,
+          defaultPrice: 20,
+          specs: [],
+          defaultFields: {}
+        }
+      ];
+
+      const state = {
+        rates: { ...DEFAULT_RATES },
+        baseAmount: DEFAULT_BASE_AMOUNT,
+        activeSource: "final",
+        pricingRowOrder: [...DEFAULT_PRICING_ROW_ORDER],
+        goods: [],
+        status: {
+          type: "info",
+          message: "تم تجهيز حاسبة التسعير. | Pricing calculator is ready."
+        },
+        customRowCounter: 0
+      };
+
+      const refs = {
+        statusBanner: document.getElementById("statusBanner"),
+        statusMessage: document.getElementById("statusMessage"),
+        summaryFinal: document.getElementById("summaryFinal"),
+        summaryFinalMeta: document.getElementById("summaryFinalMeta"),
+        summaryBase: document.getElementById("summaryBase"),
+        summaryVat: document.getElementById("summaryVat"),
+        summaryVatMeta: document.getElementById("summaryVatMeta"),
+        summaryProfit: document.getElementById("summaryProfit"),
+        summaryProfitMeta: document.getElementById("summaryProfitMeta"),
+        summaryCosts: document.getElementById("summaryCosts"),
+        summaryCostsMeta: document.getElementById("summaryCostsMeta"),
+        sourceChipLabel: document.getElementById("sourceChipLabel"),
+        pricingTableBody: document.getElementById("pricingTableBody"),
+        goodsTableBody: document.getElementById("goodsTableBody"),
+        coverageCard: document.getElementById("coverageCard"),
+        coverageTitle: document.getElementById("coverageTitle"),
+        coverageText: document.getElementById("coverageText"),
+        coverageTarget: document.getElementById("coverageTarget"),
+        coverageTotal: document.getElementById("coverageTotal"),
+        coveragePercent: document.getElementById("coveragePercent"),
+        savePercentagesBtn: document.getElementById("savePercentagesBtn"),
+        saveGoodsBtn: document.getElementById("saveGoodsBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+        addGoodsRowBtn: document.getElementById("addGoodsRowBtn")
+      };
+
+      function round(value, decimals) {
+        const factor = Math.pow(10, decimals);
+        return Math.round((value + Number.EPSILON) * factor) / factor;
+      }
+
+      function toNumber(value, fallback) {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : fallback;
+      }
+
+      function clampNonNegative(value) {
+        return Math.max(0, value);
+      }
+
+      function formatCurrency(value) {
+        return "SAR " + toNumber(value, 0).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      function formatPercent(value) {
+        return toNumber(value, 0).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + "%";
+      }
+
+      function formatInputNumber(value, decimals) {
+        return round(toNumber(value, 0), decimals).toFixed(decimals);
+      }
+
+      function getRowPercent(id) {
+        if (id === "base") {
+          return 100;
+        }
+        if (id === "final") {
+          return 100 + state.rates.vat;
+        }
+        return toNumber(state.rates[id], 0);
+      }
+
+      function getRowFactor(id) {
+        return getRowPercent(id) / 100;
+      }
+
+      function getRowAmount(id, baseAmount) {
+        return toNumber(baseAmount, state.baseAmount) * getRowFactor(id);
+      }
+
+      function getCostRateSum() {
+        return COST_RATE_IDS.reduce(function (sum, id) {
+          return sum + getRowPercent(id);
+        }, 0);
+      }
+
+      function getTotalCostsPercent() {
+        return getCostRateSum();
+      }
+
+      function getTotalCostsAmount() {
+        return COST_RATE_IDS.reduce(function (sum, id) {
+          return sum + getRowAmount(id, state.baseAmount);
+        }, 0);
+      }
+
+      function setStatus(type, message) {
+        state.status = { type: type, message: message };
+        renderStatus();
+      }
+
+      function renderStatus() {
+        const labels = {
+          success: "نجاح | Success",
+          error: "خطأ | Error",
+          warning: "تنبيه | Warning",
+          info: "جاهز | Ready"
+        };
+        refs.statusBanner.dataset.type = state.status.type;
+        refs.statusBanner.querySelector(".status-kicker").textContent = labels[state.status.type] || labels.info;
+        refs.statusMessage.textContent = state.status.message;
+      }
+
+      function getSourceLabel(id) {
+        const row = PRICING_ROWS.find(function (entry) {
+          return entry.id === id;
+        });
+        return row ? row.en : "Price Excluding VAT";
+      }
+
+      function getPricingRowById(id) {
+        return PRICING_ROWS.find(function (row) {
+          return row.id === id;
+        }) || null;
+      }
+
+      function normalizePricingRowOrder(order) {
+        const incoming = Array.isArray(order) ? order : [];
+        const validIds = [];
+
+        incoming.forEach(function (id) {
+          if (DEFAULT_PRICING_ROW_ORDER.includes(id) && !validIds.includes(id)) {
+            validIds.push(id);
+          }
+        });
+
+        DEFAULT_PRICING_ROW_ORDER.forEach(function (id) {
+          if (!validIds.includes(id)) {
+            validIds.push(id);
+          }
+        });
+
+        return validIds;
+      }
+
+      function getOrderedPricingRows() {
+        return normalizePricingRowOrder(state.pricingRowOrder).map(function (id) {
+          return getPricingRowById(id);
+        }).filter(Boolean);
+      }
+
+      function applyPercentChange(rowId, nextValue) {
+        const value = clampNonNegative(nextValue);
+        if (rowId === "base") {
+          setStatus("info", "السعر بدون ضريبة القيمة المضافة ثابت عند 100%. | Price Excluding VAT stays fixed at 100%.");
+          return false;
+        }
+        if (rowId === "final") {
+          state.rates.vat = clampNonNegative(value - 100);
+          return true;
+        }
+        if (rowId === "vat") {
+          state.rates.vat = value;
+          return true;
+        }
+        state.rates[rowId] = value;
+        return true;
+      }
+
+      function keepSourceAmountStable(sourceId, sourceAmount) {
+        const factor = getRowFactor(sourceId);
+        if (factor > 0) {
+          state.baseAmount = sourceAmount / factor;
+          return;
+        }
+        state.activeSource = "base";
+        setStatus("warning", "تعذر الإبقاء على سطر المصدر لأن نسبته أصبحت 0%. | The current source could not be preserved because its rate became 0%.");
+      }
+
+      function rebalanceProfitIfNeeded(changedRowId) {
+        if (!COST_RATE_IDS.includes(changedRowId)) {
+          return;
+        }
+        const nextProfit = round(Math.max(0, 100 - getCostRateSum()), 2);
+        state.rates.profit = nextProfit;
+        if (getCostRateSum() > 100) {
+          setStatus("warning", "تجاوزت نسب التكاليف 100% لذلك تم تثبيت الربح عند 0%. | Cost percentages exceeded 100%, so Profit was clamped to 0%.");
+        }
+      }
+
+      function createDefaultGoodsRows() {
+        return GOODS_TEMPLATES.map(function (template) {
+          return {
+            id: template.id,
+            kind: "fixed",
+            ar: template.ar,
+            en: template.en,
+            qty: template.defaultQty,
+            price: template.defaultPrice,
+            unit: template.unit,
+            fields: { ...template.defaultFields }
+          };
+        });
+      }
+
+      function createCustomRow(savedRow) {
+        state.customRowCounter += 1;
+        return {
+          id: savedRow && savedRow.id ? savedRow.id : "custom-" + Date.now() + "-" + state.customRowCounter,
+          kind: "custom",
+          ar: "إضافة مخصصة",
+          en: "Custom Item",
+          qty: toNumber(savedRow && savedRow.qty, 1),
+          price: toNumber(savedRow && savedRow.price, 0),
+          unit: "Qty",
+          fields: {
+            name: savedRow && savedRow.fields ? String(savedRow.fields.name || "") : "",
+            size: savedRow && savedRow.fields ? String(savedRow.fields.size || "") : ""
+          }
+        };
+      }
+
+      function getTemplateById(id) {
+        return GOODS_TEMPLATES.find(function (template) {
+          return template.id === id;
+        });
+      }
+
+      function getRowSpecDefinitions(row) {
+        if (row.kind === "custom") {
+          return [
+            { key: "name", ar: "الاسم", en: "Name", type: "text", placeholder: "Name" },
+            { key: "size", ar: "الحجم", en: "Size", type: "text", placeholder: "Size" }
+          ];
+        }
+        const template = getTemplateById(row.id);
+        return template ? template.specs : [];
+      }
+
+      function getLineTotal(row) {
+        return round(clampNonNegative(toNumber(row.qty, 0)) * clampNonNegative(toNumber(row.price, 0)), 4);
+      }
+
+      function getGoodsTotal() {
+        return round(state.goods.reduce(function (sum, row) {
+          return sum + getLineTotal(row);
+        }, 0), 4);
+      }
+
+      function scaleGoodsToTargetCogs() {
+        const target = round(getRowAmount("cogs", state.baseAmount), 4);
+        const currentTotal = getGoodsTotal();
+        if (Math.abs(target - currentTotal) < 0.005) {
+          return;
+        }
+        if (currentTotal <= 0) {
+          if (target > 0) {
+            setStatus("warning", "إجمالي البضاعة صفر، لذلك لم يتم تعديل الأسعار تلقائياً. | Goods total is zero, so prices were not auto-scaled.");
+          }
+          return;
+        }
+        const scale = target / currentTotal;
+        state.goods.forEach(function (row) {
+          row.price = round(clampNonNegative(toNumber(row.price, 0)) * scale, 4);
+        });
+
+        const adjustedTotal = getGoodsTotal();
+        const difference = round(target - adjustedTotal, 4);
+        if (Math.abs(difference) >= 0.005) {
+          const rowForAdjustment = state.goods.find(function (row) {
+            return clampNonNegative(toNumber(row.qty, 0)) > 0;
+          });
+          if (rowForAdjustment) {
+            const qty = clampNonNegative(toNumber(rowForAdjustment.qty, 0));
+            if (qty > 0) {
+              rowForAdjustment.price = round(clampNonNegative(toNumber(rowForAdjustment.price, 0)) + (difference / qty), 4);
+            }
+          }
+        }
+      }
+
+      function serializeGoods() {
+        return state.goods.map(function (row) {
+          return {
+            id: row.id,
+            kind: row.kind,
+            qty: clampNonNegative(toNumber(row.qty, 0)),
+            price: clampNonNegative(toNumber(row.price, 0)),
+            fields: { ...row.fields }
+          };
+        });
+      }
+
+      function restoreSavedGoods(savedRows) {
+        if (!Array.isArray(savedRows)) {
+          return createDefaultGoodsRows();
+        }
+
+        const savedFixedMap = new Map();
+        const savedCustomRows = [];
+
+        savedRows.forEach(function (row) {
+          if (!row || typeof row !== "object") {
+            return;
+          }
+          if (row.kind === "custom") {
+            savedCustomRows.push(createCustomRow(row));
+            return;
+          }
+          if (row.id) {
+            savedFixedMap.set(row.id, row);
+          }
+        });
+
+        const fixedRows = GOODS_TEMPLATES.map(function (template) {
+          const saved = savedFixedMap.get(template.id);
+          return {
+            id: template.id,
+            kind: "fixed",
+            ar: template.ar,
+            en: template.en,
+            qty: clampNonNegative(toNumber(saved && saved.qty, template.defaultQty)),
+            price: clampNonNegative(toNumber(saved && saved.price, template.defaultPrice)),
+            unit: template.unit,
+            fields: { ...template.defaultFields, ...(saved && saved.fields ? saved.fields : {}) }
+          };
+        });
+
+        return fixedRows.concat(savedCustomRows);
+      }
+
+      function writeRatesStorage() {
+        localStorage.setItem(STORAGE_KEYS.rates, JSON.stringify({
+          rates: state.rates,
+          rowOrder: normalizePricingRowOrder(state.pricingRowOrder)
+        }));
+      }
+
+      function saveRates() {
+        try {
+          writeRatesStorage();
+          setStatus("success", "تم حفظ نسب التسعير وترتيب الصفوف بنجاح. | Pricing percentages and row order saved successfully.");
+        } catch (error) {
+          setStatus("error", "تعذر حفظ نسب التسعير. | Failed to save pricing percentages.");
+        }
+      }
+
+      function saveGoods() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.goods, JSON.stringify({ goods: serializeGoods() }));
+          setStatus("success", "تم حفظ بيانات البضاعة بنجاح. | Goods data saved successfully.");
+        } catch (error) {
+          setStatus("error", "تعذر حفظ بيانات البضاعة. | Failed to save goods data.");
+        }
+      }
+
+      function loadSavedState() {
+        let loadedRates = false;
+        let loadedGoods = false;
+        let messageParts = [];
+
+        state.goods = createDefaultGoodsRows();
+
+        try {
+          const savedRatesText = localStorage.getItem(STORAGE_KEYS.rates);
+          if (savedRatesText) {
+            const savedRates = JSON.parse(savedRatesText);
+            if (savedRates && savedRates.rates && typeof savedRates.rates === "object") {
+              Object.keys(DEFAULT_RATES).forEach(function (key) {
+                if (Object.prototype.hasOwnProperty.call(savedRates.rates, key)) {
+                  state.rates[key] = clampNonNegative(toNumber(savedRates.rates[key], DEFAULT_RATES[key]));
+                }
+              });
+              state.pricingRowOrder = normalizePricingRowOrder(savedRates.rowOrder);
+              loadedRates = true;
+              messageParts.push("تم تحميل النسب وترتيب الصفوف | Percentages and row order loaded");
+            }
+          }
+        } catch (error) {
+          setStatus("error", "تعذر قراءة نسب التسعير المحفوظة. | Failed to load saved percentages.");
+        }
+
+        try {
+          const savedGoodsText = localStorage.getItem(STORAGE_KEYS.goods);
+          if (savedGoodsText) {
+            const savedGoods = JSON.parse(savedGoodsText);
+            state.goods = restoreSavedGoods(savedGoods && savedGoods.goods);
+            loadedGoods = true;
+            messageParts.push("تم تحميل البضاعة المحفوظة | Goods loaded");
+          }
+        } catch (error) {
+          state.goods = createDefaultGoodsRows();
+          setStatus("error", "تعذر قراءة بيانات البضاعة المحفوظة. | Failed to load saved goods.");
+        }
+
+        if (loadedGoods) {
+          const cogsFactor = getRowFactor("cogs");
+          if (cogsFactor > 0) {
+            state.baseAmount = getGoodsTotal() / cogsFactor;
+            state.activeSource = "cogs";
+          } else {
+            state.baseAmount = DEFAULT_BASE_AMOUNT;
+            state.activeSource = "final";
+            scaleGoodsToTargetCogs();
+            setStatus("warning", "تم تحميل البضاعة لكن نسبة COGS تساوي 0%. | Goods loaded, but the COGS percentage is 0%.");
+          }
+        } else {
+          state.baseAmount = DEFAULT_BASE_AMOUNT;
+          state.activeSource = "final";
+          scaleGoodsToTargetCogs();
+        }
+
+        if (loadedRates || loadedGoods) {
+          if (state.status.type === "info") {
+            setStatus("success", messageParts.join(" • "));
+          }
+        }
+      }
+
+      function resetApp() {
+        state.rates = { ...DEFAULT_RATES };
+        state.baseAmount = DEFAULT_BASE_AMOUNT;
+        state.activeSource = "final";
+        state.pricingRowOrder = [...DEFAULT_PRICING_ROW_ORDER];
+        state.goods = createDefaultGoodsRows();
+        scaleGoodsToTargetCogs();
+        setStatus("info", "تمت إعادة القيم الافتراضية. | Defaults restored.");
+        renderPricingTable();
+        renderGoodsTable();
+        updateUI();
+      }
+
+      function buildPricingRow(row) {
+        const tr = document.createElement("tr");
+        tr.dataset.rowId = row.id;
+
+        if (row.id === "vat" || row.id === "payment") {
+          tr.classList.add("key-row-fee");
+        }
+        if (row.id === "base" || row.id === "final") {
+          tr.classList.add("key-row-total");
+        }
+
+        const labelCell = document.createElement("td");
+        const labelWrap = document.createElement("div");
+        labelWrap.className = "row-label";
+        labelWrap.innerHTML =
+          '<div>' +
+            '<span class="label-ar">' + row.ar + '</span>' +
+            '<span class="label-en">' + row.en + '</span>' +
+          "</div>" +
+          '<span class="row-badge">' + row.badge + "</span>";
+        labelCell.appendChild(labelWrap);
+
+        const percentCell = document.createElement("td");
+        const percentShell = document.createElement("div");
+        percentShell.className = "input-shell percent-shell";
+        const percentInput = document.createElement("input");
+        percentInput.type = "number";
+        percentInput.step = "0.01";
+        percentInput.min = "0";
+        percentInput.dataset.role = "percent";
+        percentInput.dataset.rowId = row.id;
+        if (row.id === "base") {
+          percentInput.readOnly = true;
+        }
+        percentInput.addEventListener("input", handlePercentInput);
+        percentInput.addEventListener("blur", handlePercentBlur);
+        const percentAffix = document.createElement("span");
+        percentAffix.className = "input-affix";
+        percentAffix.textContent = "%";
+        percentShell.appendChild(percentInput);
+        percentShell.appendChild(percentAffix);
+        percentCell.appendChild(percentShell);
+
+        const amountCell = document.createElement("td");
+        const amountShell = document.createElement("div");
+        amountShell.className = "input-shell currency-shell";
+        const amountInput = document.createElement("input");
+        amountInput.type = "number";
+        amountInput.step = "0.01";
+        amountInput.min = "0";
+        amountInput.dataset.role = "amount";
+        amountInput.dataset.rowId = row.id;
+        amountInput.addEventListener("input", handleAmountInput);
+        amountInput.addEventListener("blur", handleAmountBlur);
+        const amountAffix = document.createElement("span");
+        amountAffix.className = "input-affix";
+        amountAffix.textContent = "SAR";
+        amountShell.appendChild(amountInput);
+        amountShell.appendChild(amountAffix);
+        amountCell.appendChild(amountShell);
+
+        const moveCell = document.createElement("td");
+        moveCell.className = "move-cell";
+        const moveStack = document.createElement("div");
+        moveStack.className = "move-stack";
+
+        const upBtn = document.createElement("button");
+        upBtn.type = "button";
+        upBtn.className = "move-btn";
+        upBtn.textContent = "↑";
+        upBtn.title = "Move Up";
+        upBtn.setAttribute("aria-label", "Move row up");
+        upBtn.dataset.rowId = row.id;
+        upBtn.dataset.direction = "up";
+        upBtn.addEventListener("click", handleMoveRow);
+
+        const downBtn = document.createElement("button");
+        downBtn.type = "button";
+        downBtn.className = "move-btn";
+        downBtn.textContent = "↓";
+        downBtn.title = "Move Down";
+        downBtn.setAttribute("aria-label", "Move row down");
+        downBtn.dataset.rowId = row.id;
+        downBtn.dataset.direction = "down";
+        downBtn.addEventListener("click", handleMoveRow);
+
+        moveStack.appendChild(upBtn);
+        moveStack.appendChild(downBtn);
+        moveCell.appendChild(moveStack);
+
+        tr.appendChild(labelCell);
+        tr.appendChild(percentCell);
+        tr.appendChild(amountCell);
+        tr.appendChild(moveCell);
+        return tr;
+      }
+
+      function renderPricingTable() {
+        refs.pricingTableBody.innerHTML = "";
+        getOrderedPricingRows().forEach(function (row) {
+          refs.pricingTableBody.appendChild(buildPricingRow(row));
+        });
+      }
+
+      function updateMoveButtons() {
+        const orderedIds = normalizePricingRowOrder(state.pricingRowOrder);
+        orderedIds.forEach(function (rowId, index) {
+          const tr = refs.pricingTableBody.querySelector('tr[data-row-id="' + rowId + '"]');
+          if (!tr) {
+            return;
+          }
+          const upBtn = tr.querySelector('button[data-direction="up"]');
+          const downBtn = tr.querySelector('button[data-direction="down"]');
+          if (upBtn) {
+            upBtn.disabled = index === 0;
+          }
+          if (downBtn) {
+            downBtn.disabled = index === orderedIds.length - 1;
+          }
+        });
+      }
+
+      function handleMoveRow(event) {
+        const rowId = event.currentTarget.dataset.rowId;
+        const direction = event.currentTarget.dataset.direction;
+        const orderedIds = normalizePricingRowOrder(state.pricingRowOrder);
+        const currentIndex = orderedIds.indexOf(rowId);
+        if (currentIndex === -1) {
+          return;
+        }
+
+        const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+        if (targetIndex < 0 || targetIndex >= orderedIds.length) {
+          return;
+        }
+
+        const movedId = orderedIds[currentIndex];
+        orderedIds.splice(currentIndex, 1);
+        orderedIds.splice(targetIndex, 0, movedId);
+        state.pricingRowOrder = orderedIds;
+
+        renderPricingTable();
+        updateUI();
+
+        try {
+          writeRatesStorage();
+          setStatus("success", "تم تحديث ترتيب صفوف جدول التسعير. | Main pricing row order updated.");
+        } catch (error) {
+          setStatus("warning", "تم تحديث الترتيب لكن تعذر حفظه محلياً. | Row order changed, but it could not be saved locally.");
+        }
+      }
+
+      function buildSpecField(row, spec) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "field-group";
+
+        const label = document.createElement("label");
+        label.textContent = spec.ar + " | " + spec.en;
+        wrapper.appendChild(label);
+
+        let control;
+        if (spec.type === "select") {
+          control = document.createElement("select");
+          spec.options.forEach(function (option) {
+            const element = document.createElement("option");
+            element.value = option;
+            element.textContent = option;
+            control.appendChild(element);
+          });
+          control.value = row.fields[spec.key] || spec.options[0] || "";
+        } else {
+          control = document.createElement("input");
+          control.type = "text";
+          control.placeholder = spec.placeholder || "";
+          control.value = row.fields[spec.key] || "";
+        }
+
+        control.dataset.rowId = row.id;
+        control.dataset.field = spec.key;
+        control.dataset.kind = "spec";
+        control.addEventListener("input", handleGoodsFieldInput);
+        control.addEventListener("change", handleGoodsFieldInput);
+        wrapper.appendChild(control);
+        return wrapper;
+      }
+
+      function buildGoodsRow(row) {
+        const tr = document.createElement("tr");
+        tr.dataset.rowId = row.id;
+
+        const itemCell = document.createElement("td");
+        itemCell.className = "item-cell";
+        itemCell.innerHTML =
+          '<span class="label-ar">' + row.ar + '</span>' +
+          '<span class="label-en">' + row.en + '</span>';
+        if (row.kind === "custom") {
+          const actions = document.createElement("div");
+          actions.className = "custom-actions";
+          const deleteBtn = document.createElement("button");
+          deleteBtn.type = "button";
+          deleteBtn.className = "delete-inline";
+          deleteBtn.textContent = "حذف | Delete";
+          deleteBtn.dataset.rowId = row.id;
+          deleteBtn.addEventListener("click", removeCustomRow);
+          actions.appendChild(deleteBtn);
+          itemCell.appendChild(actions);
+        }
+
+        const specCell = document.createElement("td");
+        const specGrid = document.createElement("div");
+        specGrid.className = "spec-grid";
+        const specDefinitions = getRowSpecDefinitions(row);
+        if (specDefinitions.length === 0) {
+          const emptyNote = document.createElement("div");
+          emptyNote.className = "empty-note";
+          emptyNote.textContent = "—";
+          specGrid.appendChild(emptyNote);
+        } else {
+          specDefinitions.forEach(function (spec) {
+            specGrid.appendChild(buildSpecField(row, spec));
+          });
+        }
+        specCell.appendChild(specGrid);
+
+        const qtyCell = document.createElement("td");
+        const qtyBox = document.createElement("div");
+        qtyBox.className = "qty-box";
+        const qtyInput = document.createElement("input");
+        qtyInput.type = "number";
+        qtyInput.step = "0.01";
+        qtyInput.min = "0";
+        qtyInput.dataset.rowId = row.id;
+        qtyInput.dataset.field = "qty";
+        qtyInput.dataset.kind = "qty";
+        qtyInput.addEventListener("input", handleGoodsFieldInput);
+        qtyInput.addEventListener("blur", handleGoodsFieldBlur);
+        const qtyUnit = document.createElement("span");
+        qtyUnit.className = "unit-badge";
+        qtyUnit.textContent = row.unit;
+        qtyBox.appendChild(qtyInput);
+        qtyBox.appendChild(qtyUnit);
+        qtyCell.appendChild(qtyBox);
+
+        const priceCell = document.createElement("td");
+        const priceBox = document.createElement("div");
+        priceBox.className = "price-box";
+        const priceInput = document.createElement("input");
+        priceInput.type = "number";
+        priceInput.step = "0.01";
+        priceInput.min = "0";
+        priceInput.dataset.rowId = row.id;
+        priceInput.dataset.field = "price";
+        priceInput.dataset.kind = "price";
+        priceInput.addEventListener("input", handleGoodsFieldInput);
+        priceInput.addEventListener("blur", handleGoodsFieldBlur);
+        const sarBadge = document.createElement("span");
+        sarBadge.className = "sar-badge";
+        sarBadge.textContent = "SAR";
+        priceBox.appendChild(priceInput);
+        priceBox.appendChild(sarBadge);
+        priceCell.appendChild(priceBox);
+
+        const totalCell = document.createElement("td");
+        totalCell.className = "line-total";
+        totalCell.dataset.role = "line-total";
+
+        const shareCell = document.createElement("td");
+        const shareBadge = document.createElement("span");
+        shareBadge.className = "share-badge";
+        shareBadge.dataset.role = "share";
+        shareCell.appendChild(shareBadge);
+
+        tr.appendChild(itemCell);
+        tr.appendChild(specCell);
+        tr.appendChild(qtyCell);
+        tr.appendChild(priceCell);
+        tr.appendChild(totalCell);
+        tr.appendChild(shareCell);
+        return tr;
+      }
+
+      function renderGoodsTable() {
+        refs.goodsTableBody.innerHTML = "";
+        state.goods.forEach(function (row) {
+          refs.goodsTableBody.appendChild(buildGoodsRow(row));
+        });
+      }
+
+      function updateSummary() {
+        const finalAmount = getRowAmount("final", state.baseAmount);
+        const vatAmount = getRowAmount("vat", state.baseAmount);
+        const profitAmount = getRowAmount("profit", state.baseAmount);
+        const costAmount = getTotalCostsAmount();
+
+        refs.summaryFinal.textContent = formatCurrency(finalAmount);
+        refs.summaryFinalMeta.textContent = formatPercent(getRowPercent("final"));
+        refs.summaryBase.textContent = formatCurrency(state.baseAmount);
+        refs.summaryVat.textContent = formatCurrency(vatAmount);
+        refs.summaryVatMeta.textContent = formatPercent(getRowPercent("vat"));
+        refs.summaryProfit.textContent = formatCurrency(profitAmount);
+        refs.summaryProfitMeta.textContent = formatPercent(getRowPercent("profit"));
+        refs.summaryCosts.textContent = formatCurrency(costAmount);
+        refs.summaryCostsMeta.textContent = formatPercent(getTotalCostsPercent());
+        refs.sourceChipLabel.textContent = getSourceLabel(state.activeSource || "base");
+      }
+
+      function updatePricingTable(skipElement) {
+        const activeElement = document.activeElement;
+        getOrderedPricingRows().forEach(function (row) {
+          const tr = refs.pricingTableBody.querySelector('tr[data-row-id="' + row.id + '"]');
+          if (!tr) {
+            return;
+          }
+          tr.classList.toggle("active-source", row.id === state.activeSource);
+
+          const percentInput = tr.querySelector('input[data-role="percent"]');
+          const amountInput = tr.querySelector('input[data-role="amount"]');
+          const nextPercentValue = formatInputNumber(getRowPercent(row.id), 2);
+          const nextAmountValue = formatInputNumber(getRowAmount(row.id, state.baseAmount), 2);
+
+          if (percentInput && percentInput !== activeElement && percentInput !== skipElement) {
+            percentInput.value = nextPercentValue;
+          }
+          if (amountInput && amountInput !== activeElement && amountInput !== skipElement) {
+            amountInput.value = nextAmountValue;
+          }
+        });
+      }
+
+      function updateGoodsTable(skipElement) {
+        const activeElement = document.activeElement;
+        const goodsTotal = getGoodsTotal();
+        state.goods.forEach(function (row) {
+          const tr = refs.goodsTableBody.querySelector('tr[data-row-id="' + row.id + '"]');
+          if (!tr) {
+            return;
+          }
+
+          const specDefinitions = getRowSpecDefinitions(row);
+          specDefinitions.forEach(function (spec) {
+            const field = tr.querySelector('[data-field="' + spec.key + '"]');
+            if (field && field !== activeElement && field !== skipElement) {
+              field.value = row.fields[spec.key] || "";
+            }
+          });
+
+          const qtyInput = tr.querySelector('[data-kind="qty"]');
+          const priceInput = tr.querySelector('[data-kind="price"]');
+          const totalCell = tr.querySelector('[data-role="line-total"]');
+          const shareBadge = tr.querySelector('[data-role="share"]');
+
+          if (qtyInput && qtyInput !== activeElement && qtyInput !== skipElement) {
+            qtyInput.value = formatInputNumber(clampNonNegative(toNumber(row.qty, 0)), 2);
+          }
+          if (priceInput && priceInput !== activeElement && priceInput !== skipElement) {
+            priceInput.value = formatInputNumber(clampNonNegative(toNumber(row.price, 0)), 2);
+          }
+
+          const lineTotal = getLineTotal(row);
+          const share = goodsTotal > 0 ? (lineTotal / goodsTotal) * 100 : 0;
+          if (totalCell) {
+            totalCell.textContent = formatCurrency(lineTotal);
+          }
+          if (shareBadge) {
+            shareBadge.textContent = formatPercent(share);
+          }
+        });
+      }
+
+      function updateCoverageCard() {
+        const goodsTotal = getGoodsTotal();
+        const cogsTarget = round(getRowAmount("cogs", state.baseAmount), 4);
+        const coverage = cogsTarget > 0 ? (goodsTotal / cogsTarget) * 100 : (goodsTotal === 0 ? 100 : 0);
+        const aligned = Math.abs(goodsTotal - cogsTarget) < 0.01;
+
+        refs.coverageCard.classList.toggle("good", aligned);
+        refs.coverageCard.classList.toggle("warning", !aligned);
+        refs.coverageTitle.textContent = "إجمالي البضاعة يساوي " + formatPercent(coverage) + " من تكلفة البضاعة الحالية.";
+        refs.coverageText.textContent = "Goods total equals " + formatPercent(coverage) + " of the current Cost of Goods.";
+        refs.coverageTarget.textContent = formatCurrency(cogsTarget);
+        refs.coverageTotal.textContent = formatCurrency(goodsTotal);
+        refs.coveragePercent.textContent = formatPercent(coverage);
+      }
+
+      function updateUI(skipElement) {
+        updateSummary();
+        updatePricingTable(skipElement);
+        updateMoveButtons();
+        updateGoodsTable(skipElement);
+        updateCoverageCard();
+        renderStatus();
+      }
+
+      function handlePercentInput(event) {
+        const rowId = event.target.dataset.rowId;
+        const rawValue = event.target.value;
+        if (rawValue === "") {
+          return;
+        }
+        const sourceId = state.activeSource || "base";
+        const sourceAmount = getRowAmount(sourceId, state.baseAmount);
+        const changed = applyPercentChange(rowId, toNumber(rawValue, 0));
+        if (!changed) {
+          updateUI(event.target);
+          return;
+        }
+        rebalanceProfitIfNeeded(rowId);
+        keepSourceAmountStable(sourceId, sourceAmount);
+        scaleGoodsToTargetCogs();
+        updateUI(event.target);
+      }
+
+      function handlePercentBlur(event) {
+        if (event.target.value === "") {
+          event.target.value = formatInputNumber(getRowPercent(event.target.dataset.rowId), 2);
+        }
+      }
+
+      function handleAmountInput(event) {
+        const rowId = event.target.dataset.rowId;
+        const rawValue = event.target.value;
+        if (rawValue === "") {
+          return;
+        }
+        const factor = getRowFactor(rowId);
+        if (factor <= 0) {
+          setStatus("error", "لا يمكن استخدام مبلغ هذا السطر كمصدر عندما تكون النسبة 0%. | This row cannot be used as a source while its rate is 0%.");
+          event.target.value = formatInputNumber(getRowAmount(rowId, state.baseAmount), 2);
+          updateUI();
+          return;
+        }
+        state.baseAmount = clampNonNegative(toNumber(rawValue, 0)) / factor;
+        state.activeSource = rowId;
+        scaleGoodsToTargetCogs();
+        updateUI(event.target);
+      }
+
+      function handleAmountBlur(event) {
+        if (event.target.value === "") {
+          event.target.value = formatInputNumber(getRowAmount(event.target.dataset.rowId, state.baseAmount), 2);
+        }
+      }
+
+      function findGoodsRow(rowId) {
+        return state.goods.find(function (row) {
+          return row.id === rowId;
+        });
+      }
+
+      function recalculateFromGoods(skipElement) {
+        const cogsFactor = getRowFactor("cogs");
+        if (cogsFactor <= 0) {
+          setStatus("error", "يجب أن تكون نسبة تكلفة البضاعة أكبر من 0% لحساب الجدول من البضاعة. | COGS percentage must be greater than 0% to calculate from goods.");
+          updateUI(skipElement);
+          return;
+        }
+        state.baseAmount = getGoodsTotal() / cogsFactor;
+        state.activeSource = "cogs";
+        updateUI(skipElement);
+      }
+
+      function handleGoodsFieldInput(event) {
+        const rowId = event.target.dataset.rowId;
+        const field = event.target.dataset.field;
+        const kind = event.target.dataset.kind;
+        const row = findGoodsRow(rowId);
+        if (!row) {
+          return;
+        }
+
+        if (kind === "qty" || kind === "price") {
+          if (event.target.value === "") {
+            return;
+          }
+          row[field] = clampNonNegative(toNumber(event.target.value, 0));
+        } else {
+          row.fields[field] = event.target.value;
+        }
+        recalculateFromGoods(event.target);
+      }
+
+      function handleGoodsFieldBlur(event) {
+        const rowId = event.target.dataset.rowId;
+        const field = event.target.dataset.field;
+        const row = findGoodsRow(rowId);
+        if (!row) {
+          return;
+        }
+        if (event.target.value === "") {
+          row[field] = 0;
+          recalculateFromGoods(event.target);
+        }
+      }
+
+      function addCustomRow() {
+        state.goods.push(createCustomRow());
+        renderGoodsTable();
+        updateUI();
+        setStatus("success", "تمت إضافة صف مخصص جديد. | A new custom row was added.");
+      }
+
+      function removeCustomRow(event) {
+        const rowId = event.currentTarget.dataset.rowId;
+        state.goods = state.goods.filter(function (row) {
+          return row.id !== rowId;
+        });
+        renderGoodsTable();
+        recalculateFromGoods();
+        setStatus("success", "تم حذف الصف المخصص. | Custom row removed.");
+      }
+
+      refs.savePercentagesBtn.addEventListener("click", saveRates);
+      refs.saveGoodsBtn.addEventListener("click", saveGoods);
+      refs.resetBtn.addEventListener("click", resetApp);
+      refs.addGoodsRowBtn.addEventListener("click", addCustomRow);
+
+      renderPricingTable();
+      loadSavedState();
+      renderGoodsTable();
+      updateUI();
+    })();
+  </script>
+</body>
+</html>
